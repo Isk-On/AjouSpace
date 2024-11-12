@@ -1,143 +1,108 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Стена сообщений</title>
-    <style>
-        body { font-family: Arial, sans-serif; }
-        #messageForm { margin-bottom: 20px; }
-        #wall { margin-top: 20px; }
-        .message { margin-bottom: 20px; }
-        .username { font-weight: bold; }
-        textarea { width: 100%; height: 100px; margin-top: 10px; }
-        button { margin-top: 10px; }
-    </style>
+    <title>Чат</title>
 </head>
 <body>
+    <div id="registerForm">
+        <h2>Регистрация</h2>
+        <input type="text" id="registerUsername" placeholder="Имя пользователя">
+        <input type="password" id="registerPassword" placeholder="Пароль">
+        <button onclick="registerUser()">Регистрация</button>
+    </div>
 
-<h1>Стена сообщений</h1>
+    <div id="loginForm">
+        <h2>Авторизация</h2>
+        <input type="text" id="loginUsername" placeholder="Имя пользователя">
+        <input type="password" id="loginPassword" placeholder="Пароль">
+        <button onclick="loginUser()">Войти</button>
+    </div>
 
-<!-- Форма регистрации -->
-<div id="registerForm">
-    <h2>Регистрация</h2>
-    <label for="registerUsername">Имя пользователя:</label>
-    <input type="text" id="registerUsername" placeholder="Ваше имя">
-    <label for="registerPassword">Пароль:</label>
-    <input type="password" id="registerPassword" placeholder="Ваш пароль">
-    <button onclick="registerUser()">Зарегистрироваться</button>
-</div>
+    <div id="messageForm" style="display: none;">
+        <h2>Стена сообщений</h2>
+        <div id="wall"></div>
+        <input type="text" id="message" placeholder="Ваше сообщение">
+        <button onclick="postMessage()">Отправить</button>
+    </div>
 
-<!-- Форма авторизации -->
-<div id="loginForm">
-    <h2>Авторизация</h2>
-    <label for="loginUsername">Имя пользователя:</label>
-    <input type="text" id="loginUsername" placeholder="Ваше имя">
-    <label for="loginPassword">Пароль:</label>
-    <input type="password" id="loginPassword" placeholder="Ваш пароль">
-    <button onclick="loginUser()">Войти</button>
-</div>
+    <script>
+        function fetchMessages() {
+            fetch('https://data-base.up.railway.app/getMessages')
+                .then(response => response.json())
+                .then(messages => {
+                    const wall = document.getElementById('wall');
+                    wall.innerHTML = '';
+                    messages.forEach(msg => {
+                        const messageElement = document.createElement('div');
+                        messageElement.classList.add('message');
+                        messageElement.innerHTML = `<span class="username">${msg.username}:</span> ${msg.message}`;
+                        wall.appendChild(messageElement);
+                    });
+                });
+        }
 
-<!-- Форма добавления сообщения -->
-<div id="messageForm" style="display: none;">
-    <h2>Оставить сообщение</h2>
-    <label for="message">Ваше сообщение:</label>
-    <textarea id="message" placeholder="Ваше сообщение"></textarea>
-    <button onclick="postMessage()">Отправить сообщение</button>
-</div>
+        function registerUser() {
+            const username = document.getElementById('registerUsername').value;
+            const password = document.getElementById('registerPassword').value;
+            fetch('https://data-base.up.railway.app/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, password })
+            })
+            .then(response => response.text())
+            .then(data => {
+                alert(data);
+            })
+            .catch(error => console.error('Ошибка:', error));
+        }
 
-<div id="wall">
-    <h2>Сообщения</h2>
-    <!-- Сообщения будут отображаться здесь -->
-</div>
+        function loginUser() {
+            const username = document.getElementById('loginUsername').value;
+            const password = document.getElementById('loginPassword').value;
+            fetch('https://data-base.up.railway.app/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, password })
+            })
+            .then(response => response.json())
+            .then(data => {
+                localStorage.setItem('token', data.token);
+                document.getElementById('loginForm').style.display = 'none';
+                document.getElementById('registerForm').style.display = 'none';
+                document.getElementById('messageForm').style.display = 'block';
+                fetchMessages();
+            })
+            .catch(error => console.error('Ошибка:', error));
+        }
 
-<script>
-// Регистрация пользователя
-function registerUser() {
-    const username = document.getElementById('registerUsername').value;
-    const password = document.getElementById('registerPassword').value;
+        function postMessage() {
+            const message = document.getElementById('message').value;
+            const token = localStorage.getItem('token');
+            fetch('https://data-base.up.railway.app/postMessage', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': token
+                },
+                body: JSON.stringify({ message })
+            })
+            .then(response => response.text())
+            .then(data => {
+                console.log(data);
+                document.getElementById('message').value = '';
+            })
+            .catch(error => console.error('Ошибка:', error));
+        }
 
-    fetch('https://data-base.up.railway.app/register', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ username, password })
-    })
-    .then(response => response.text())
-    .then(data => {
-        alert(data);
-        document.getElementById('registerForm').style.display = 'none';
-        document.getElementById('loginForm').style.display = 'block';
-    })
-    .catch(error => console.error('Ошибка:', error));
-}
-
-// Авторизация пользователя
-function loginUser() {
-    const username = document.getElementById('loginUsername').value;
-    const password = document.getElementById('loginPassword').value;
-
-    fetch('https://data-base.up.railway.app/login', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ username, password })
-    })
-    .then(response => response.json())
-    .then(data => {
-        localStorage.setItem('token', data.token);
-        document.getElementById('loginForm').style.display = 'none';
-        document.getElementById('messageForm').style.display = 'block';
-    })
-    .catch(error => alert('Ошибка при авторизации'));
-}
-fetchMessages();
-
-// Отправка сообщения
-function postMessage() {
-    const message = document.getElementById('message').value;
-    const token = localStorage.getItem('token');
-
-    if (!token) {
-        alert('Пожалуйста, войдите для отправки сообщений.');
-        return;
-    }
-
-    fetch('https://data-base.up.railway.app/postMessage', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': token
-        },
-        body: JSON.stringify({ message })
-    })
-    .then(response => response.text())
-    .then(data => {
-        alert(data);
-        fetchMessages();
-    })
-    .catch(error => console.error('Ошибка:', error));
-}
-
-// Получение всех сообщений
-function fetchMessages() {
-    fetch('https://data-base.up.railway.app/getMessages')
-    .then(response => response.json())
-    .then(data => {
-        const wall = document.getElementById('wall');
-        wall.innerHTML = '<h2>Сообщения</h2>'; // Очистка стенки
-        data.forEach(message => {
-            const messageElement = document.createElement('div');
-            messageElement.classList.add('message');
-            messageElement.innerHTML = `<span class="username">${message.username}:</span> ${message.message}`;
-            wall.appendChild(messageElement);
-        });
-    })
-    .catch(error => console.error('Ошибка:', error));
-}
-</script>
-
+        // Подписка на события для обновления сообщений
+        const eventSource = new EventSource('https://data-base.up.railway.app/events');
+        eventSource.onmessage = function(event) {
+            if (event.data === 'update') {
+                fetchMessages();
+            }
+        };
+    </script>
 </body>
 </html>
