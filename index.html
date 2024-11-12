@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Чат</title>
+    <title>Чат с изображениями</title>
 </head>
 <body>
     <div id="registerForm">
@@ -24,25 +24,11 @@
         <h2>Стена сообщений</h2>
         <div id="wall"></div>
         <input type="text" id="message" placeholder="Ваше сообщение">
-        <button onclick="postMessage()">Отправить</button>
+        <input type="file" id="image" accept="image/*">
+        <button onclick="postMessageWithImage()">Отправить</button>
     </div>
 
     <script>
-        function fetchMessages() {
-            fetch('https://data-base.up.railway.app/getMessages')
-                .then(response => response.json())
-                .then(messages => {
-                    const wall = document.getElementById('wall');
-                    wall.innerHTML = '';
-                    messages.forEach(msg => {
-                        const messageElement = document.createElement('div');
-                        messageElement.classList.add('message');
-                        messageElement.innerHTML = `<span class="username">${msg.username}:</span> ${msg.message}`;
-                        wall.appendChild(messageElement);
-                    });
-                });
-        }
-
         function registerUser() {
             const username = document.getElementById('registerUsername').value;
             const password = document.getElementById('registerPassword').value;
@@ -77,21 +63,50 @@
             .catch(error => console.error('Ошибка:', error));
         }
 
-        function postMessage() {
+        function fetchMessages() {
+            fetch('https://data-base.up.railway.app/getMessages')
+                .then(response => response.json())
+                .then(messages => {
+                    const wall = document.getElementById('wall');
+                    wall.innerHTML = '';
+                    messages.forEach(msg => {
+                        const messageElement = document.createElement('div');
+                        messageElement.classList.add('message');
+                        
+                        let messageContent = `<span class="username">${msg.username}:</span> ${msg.message}`;
+                        if (msg.image) {
+                            messageContent += `<br><img src="${msg.image}" alt="Image" width="200">`;
+                        }
+                        
+                        messageElement.innerHTML = messageContent;
+                        wall.appendChild(messageElement);
+                    });
+                });
+        }
+
+        function postMessageWithImage() {
             const message = document.getElementById('message').value;
+            const image = document.getElementById('image').files[0];
             const token = localStorage.getItem('token');
-            fetch('https://data-base.up.railway.app/postMessage', {
+
+            const formData = new FormData();
+            formData.append('message', message);
+            if (image) {
+                formData.append('image', image);
+            }
+
+            fetch('https://data-base.up.railway.app/postMessageWithImage', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
                     'Authorization': token
                 },
-                body: JSON.stringify({ message })
+                body: formData
             })
             .then(response => response.text())
             .then(data => {
                 console.log(data);
                 document.getElementById('message').value = '';
+                document.getElementById('image').value = '';
             })
             .catch(error => console.error('Ошибка:', error));
         }
