@@ -97,8 +97,12 @@ function fetchMessages() {
     .catch((error) => console.error("Ошибка:", error)); // Обработка ошибок
 }
 function postMessageWithImage() {
-  document.querySelector(".icon-attach").style.display = "block";
   const message = document.getElementById("message").value;
+  const messageBtn = document.querySelector(".btn-submit");
+  document.querySelector(".icon-attach").style.display = "block";
+  document.getElementById("file-name").textContent = '';
+  messageBtn.style.display = "none";
+
   const image = document.getElementById("image").files[0];
   const token = localStorage.getItem("token");
 

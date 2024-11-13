@@ -101,7 +101,7 @@ body {
 
 /* file upload */
 
-input[type="file"] {
+.upload_image {
   display: none;
 }
 
