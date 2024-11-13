@@ -4,6 +4,31 @@ document.getElementById("image").addEventListener("change", function () {
   document.getElementById("file-name").textContent = `${fileName}`;
 });
 
+function switchModal(type) {
+  const registerForm = document.getElementById("registerForm");
+  const loginForm = document.getElementById("loginForm");
+
+  if (type === "login") {
+      registerForm.setAttribute("aria-hidden", "true");
+      loginForm.setAttribute("aria-hidden", "false");
+  } else {
+      registerForm.setAttribute("aria-hidden", "false");
+      loginForm.setAttribute("aria-hidden", "true");
+  }
+}
+function switchModal(type) {
+    const registerForm = document.getElementById("registerForm");
+    const loginForm = document.getElementById("loginForm");
+
+    if (type === "login") {
+        registerForm.setAttribute("aria-hidden", "true");
+        loginForm.setAttribute("aria-hidden", "false");
+    } else {
+        registerForm.setAttribute("aria-hidden", "false");
+        loginForm.setAttribute("aria-hidden", "true");
+    }
+}
+
 const input = document.getElementById("message");
 const message = document.querySelector(".btn-submit");
 
@@ -27,27 +52,28 @@ function registerUser() {
     formData.append("avatar", avatarFile);
   }
 
-  fetch("https://data-base.up.railway.app/register", {
+  fetch("http://127.0.0.1:3000/register", {
     method: "POST",
     body: formData,
   })
     .then((response) => response.json())
     .then((data) => {
-        console.log(data);
+      console.log(data);
       alert(data.message);
       localStorage.setItem("token", data.token);
       fetchMessages();
       document.getElementById("messageForm").style.display = "flex";
-      document.getElementById("loginForm").style.display = "none";
-      document.getElementById("registerForm").style.display = "none";
+      document.getElementById("modalOverlay").style.display = "none";
     })
-    .catch((error) => alert("Ошибка: Такой пользователь уже существует. Авторизуйтесь"));
+    .catch((error) =>
+      alert("Ошибка: Такой пользователь уже существует. Авторизуйтесь")
+    );
 }
 
 function loginUser() {
   const username = document.getElementById("loginUsername").value;
   const password = document.getElementById("loginPassword").value;
-  fetch("https://data-base.up.railway.app/login", {
+  fetch("http://127.0.0.1:3000/login", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ username, password }),
@@ -55,20 +81,21 @@ function loginUser() {
     .then((response) => response.json())
     .then((data) => {
       localStorage.setItem("token", data.token);
-      document.getElementById("loginForm").style.display = "none";
-      document.getElementById("registerForm").style.display = "none";
+      document.getElementById("modalOverlay").style.display = "none";
       document.getElementById("messageForm").style.display = "flex";
       fetchMessages();
     })
-    .catch((error) => alert("Ошибка: Такого пользователя нет, или пароль/логин введен неверно."));
+    .catch((error) =>
+      alert("Ошибка: Такого пользователя нет, или пароль/логин введен неверно.")
+    );
 }
 
 function fetchMessages() {
-  fetch("https://data-base.up.railway.app/getMessages")
+  fetch("http://127.0.0.1:3000/getMessages")
     .then((response) => response.json())
     .then((messages) => {
       const wall = document.getElementById("wall");
-      wall.innerHTML = ""; 
+      wall.innerHTML = "";
       messages.forEach((msg) => {
         const messageElement = document.createElement("div");
         messageElement.classList.add("message");
@@ -106,7 +133,7 @@ function postMessageWithImage() {
   const message = document.getElementById("message").value;
   const messageBtn = document.querySelector(".btn-submit");
   document.querySelector(".icon-attach").style.display = "block";
-  document.getElementById("file-name").textContent = '';
+  document.getElementById("file-name").textContent = "";
   messageBtn.style.display = "none";
 
   const image = document.getElementById("image").files[0];
@@ -118,7 +145,7 @@ function postMessageWithImage() {
     formData.append("image", image);
   }
 
-  fetch("https://data-base.up.railway.app/postMessageWithImage", {
+  fetch("http://127.0.0.1:3000/postMessageWithImage", {
     method: "POST",
     headers: {
       Authorization: token,
@@ -134,7 +161,7 @@ function postMessageWithImage() {
     .catch((error) => console.error("Ошибка:", error));
 }
 
-const eventSource = new EventSource("https://data-base.up.railway.app/events");
+const eventSource = new EventSource("http://127.0.0.1:3000/events");
 eventSource.onmessage = function (event) {
   if (event.data === "update") {
     fetchMessages();

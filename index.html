@@ -13,19 +13,32 @@
     <title>AjouNet</title>
   </head>
   <body>
-    <div id="registerForm">
-      <h2>Регистрация</h2>
-      <input type="text" id="registerUsername" placeholder="Имя пользователя" />
-      <input type="password" id="registerPassword" placeholder="Пароль" />
-      <input type="file" id="registerAvatar" accept="image/*" />
-      <button onclick="registerUser()">Регистрация</button>
+    <div id="modalOverlay" class="modal-overlay show">
+      <div id="registerForm" class="modal-content" aria-hidden="false">
+        <h2>Регистрация</h2>
+        <input
+          type="text"
+          id="registerUsername"
+          placeholder="Имя пользователя"
+        />
+        <input type="password" id="registerPassword" placeholder="Пароль" />
+        <input type="file" id="registerAvatar" accept="image/*" />
+        <button onclick="registerUser()">Регистрация</button>
+        <button class="modal-close" onclick="switchModal('login')">
+          Перейти к Авторизации
+        </button>
+      </div>
+      <div id="loginForm" class="modal-content" aria-hidden="true">
+        <h2>Авторизация</h2>
+        <input type="text" id="loginUsername" placeholder="Имя пользователя" />
+        <input type="password" id="loginPassword" placeholder="Пароль" />
+        <button onclick="loginUser()">Войти</button>
+        <button class="modal-close" onclick="switchModal('register')">
+          Перейти к Регистрации
+        </button>
+      </div>
     </div>
-    <div id="loginForm">
-      <h2>Авторизация</h2>
-      <input type="text" id="loginUsername" placeholder="Имя пользователя" />
-      <input type="password" id="loginPassword" placeholder="Пароль" />
-      <button onclick="loginUser()">Войти</button>
-    </div>
+
     <div class="wall" id="wall"></div>
     <div id="messageForm" class="messageSection" style="display: none">
       <div class="file-upload">
