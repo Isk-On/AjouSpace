@@ -18,24 +18,30 @@ input.addEventListener("input", function () {
 function registerUser() {
   const username = document.getElementById("registerUsername").value;
   const password = document.getElementById("registerPassword").value;
-  const avatarFile = document.getElementById("registerAvatar").files[0]; // Получаем выбранный файл аватара
+  const avatarFile = document.getElementById("registerAvatar").files[0];
 
   const formData = new FormData();
   formData.append("username", username);
   formData.append("password", password);
   if (avatarFile) {
-    formData.append("avatar", avatarFile); // Добавляем файл аватара
+    formData.append("avatar", avatarFile);
   }
 
   fetch("https://data-base.up.railway.app/register", {
     method: "POST",
     body: formData,
   })
-    .then((response) => response.text())
+    .then((response) => response.json())
     .then((data) => {
-      alert(data);
+        console.log(data);
+      alert(data.message);
+      localStorage.setItem("token", data.token);
+      fetchMessages();
+      document.getElementById("messageForm").style.display = "flex";
+      document.getElementById("loginForm").style.display = "none";
+      document.getElementById("registerForm").style.display = "none";
     })
-    .catch((error) => console.error("Ошибка:", error));
+    .catch((error) => alert("Ошибка: Такой пользователь уже существует. Авторизуйтесь"));
 }
 
 function loginUser() {
@@ -54,7 +60,7 @@ function loginUser() {
       document.getElementById("messageForm").style.display = "flex";
       fetchMessages();
     })
-    .catch((error) => console.error("Ошибка:", error));
+    .catch((error) => alert("Ошибка: Такого пользователя нет, или пароль/логин введен неверно."));
 }
 
 function fetchMessages() {
@@ -62,7 +68,7 @@ function fetchMessages() {
     .then((response) => response.json())
     .then((messages) => {
       const wall = document.getElementById("wall");
-      wall.innerHTML = ""; // Очистить стену перед добавлением новых сообщений
+      wall.innerHTML = ""; 
       messages.forEach((msg) => {
         const messageElement = document.createElement("div");
         messageElement.classList.add("message");
