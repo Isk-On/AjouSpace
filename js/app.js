@@ -9,8 +9,8 @@ const message = document.querySelector(".btn-submit");
 
 input.addEventListener("input", function () {
   if (input.value.trim() === "") {
-      message.style.display = "none";
-} else {
+    message.style.display = "none";
+  } else {
     message.style.display = "block";
   }
 });
