@@ -52,7 +52,7 @@ function registerUser() {
     formData.append("avatar", avatarFile);
   }
 
-  fetch("http://127.0.0.1:3000/register", {
+  fetch("https://data-base.up.railway.app/register", {
     method: "POST",
     body: formData,
   })
@@ -73,7 +73,7 @@ function registerUser() {
 function loginUser() {
   const username = document.getElementById("loginUsername").value;
   const password = document.getElementById("loginPassword").value;
-  fetch("http://127.0.0.1:3000/login", {
+  fetch("https://data-base.up.railway.app/login", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ username, password }),
@@ -91,7 +91,8 @@ function loginUser() {
 }
 
 function fetchMessages() {
-  fetch("http://127.0.0.1:3000/getMessages")
+  document.getElementById("modalOverlay").style.display = "none";
+  fetch("https://data-base.up.railway.app/getMessages")
     .then((response) => response.json())
     .then((messages) => {
       const wall = document.getElementById("wall");
@@ -145,7 +146,7 @@ function postMessageWithImage() {
     formData.append("image", image);
   }
 
-  fetch("http://127.0.0.1:3000/postMessageWithImage", {
+  fetch("https://data-base.up.railway.app/postMessageWithImage", {
     method: "POST",
     headers: {
       Authorization: token,
@@ -161,7 +162,7 @@ function postMessageWithImage() {
     .catch((error) => console.error("Ошибка:", error));
 }
 
-const eventSource = new EventSource("http://127.0.0.1:3000/events");
+const eventSource = new EventSource("https://data-base.up.railway.app/events");
 eventSource.onmessage = function (event) {
   if (event.data === "update") {
     fetchMessages();
