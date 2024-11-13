@@ -1,3 +1,20 @@
+document.getElementById("image").addEventListener("change", function () {
+  const fileName = this.files[0] ? this.files[0].name : "Нет файла";
+  document.querySelector(".icon-attach").style.display = "none";
+  document.getElementById("file-name").textContent = `${fileName}`;
+});
+
+const input = document.getElementById("message");
+const message = document.querySelector(".btn-submit");
+
+input.addEventListener("input", function () {
+  if (input.value.trim() === "") {
+      message.style.display = "none";
+} else {
+    message.style.display = "block";
+  }
+});
+
 function registerUser() {
   const username = document.getElementById("registerUsername").value;
   const password = document.getElementById("registerPassword").value;
@@ -34,7 +51,7 @@ function loginUser() {
       localStorage.setItem("token", data.token);
       document.getElementById("loginForm").style.display = "none";
       document.getElementById("registerForm").style.display = "none";
-      document.getElementById("messageForm").style.display = "block";
+      document.getElementById("messageForm").style.display = "flex";
       fetchMessages();
     })
     .catch((error) => console.error("Ошибка:", error));
@@ -80,6 +97,7 @@ function fetchMessages() {
     .catch((error) => console.error("Ошибка:", error)); // Обработка ошибок
 }
 function postMessageWithImage() {
+  document.querySelector(".icon-attach").style.display = "block";
   const message = document.getElementById("message").value;
   const image = document.getElementById("image").files[0];
   const token = localStorage.getItem("token");
