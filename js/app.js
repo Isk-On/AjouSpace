@@ -4,13 +4,22 @@ document.getElementById("image").addEventListener("change", function () {
   document.getElementById("file-name").textContent = `${fileName}`;
 });
 
+document.getElementById("message").addEventListener("keydown", function (ev) {
+  if (
+    ev.key === "Enter" &&
+    document.getElementById("message").value.trim() != ""
+  ) {
+    postMessageWithImage();
+  }
+});
+
 function getCookie(name) {
   const value = `; ${document.cookie}`;
   const parts = value.split(`; ${name}=`);
-  if (parts.length === 2) return parts.pop().split(';').shift();
+  if (parts.length === 2) return parts.pop().split(";").shift();
 }
 
-if (getCookie('token')){
+if (getCookie("token")) {
   const registerForm = document.getElementById("registerForm");
   const loginForm = document.getElementById("loginForm");
 
@@ -18,24 +27,22 @@ if (getCookie('token')){
   loginForm.setAttribute("aria-hidden", "true");
   document.getElementById("modalOverlay").style.display = "none";
   document.getElementById("messageForm").style.display = "flex";
-  fetchMessages()
-
+  fetchMessages();
 }
 
 function switchModal(type) {
-    const registerForm = document.getElementById("registerForm");
-    const loginForm = document.getElementById("loginForm");
+  const registerForm = document.getElementById("registerForm");
+  const loginForm = document.getElementById("loginForm");
 
-    if (type === "login") {
-        registerForm.setAttribute("aria-hidden", "true");
-        loginForm.setAttribute("aria-hidden", "false");
-      } else {
-        registerForm.setAttribute("aria-hidden", "false");
-        loginForm.setAttribute("aria-hidden", "true");
-        document.getElementById("messageForm").style.display = "flex";
-      }
-    }
-    
+  if (type === "login") {
+    registerForm.setAttribute("aria-hidden", "true");
+    loginForm.setAttribute("aria-hidden", "false");
+  } else {
+    registerForm.setAttribute("aria-hidden", "false");
+    loginForm.setAttribute("aria-hidden", "true");
+  }
+}
+
 const input = document.getElementById("message");
 const message = document.querySelector(".btn-submit");
 
@@ -52,53 +59,69 @@ function registerUser() {
   const password = document.getElementById("registerPassword").value;
   const avatarFile = document.getElementById("registerAvatar").files[0];
 
-  const formData = new FormData();
-  formData.append("username", username);
-  formData.append("password", password);
-  if (avatarFile) {
-    formData.append("avatar", avatarFile);
-  }
+  if (username != "" && password != "") {
+    const formData = new FormData();
+    formData.append("username", username);
+    formData.append("password", password);
 
-  fetch("https://data-base.up.railway.app/register", {
-    method: "POST",
-    body: formData,
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      console.log(data);
-      document.cookie = `token=${data.token}; path=/; max-age=${60 * 60 * 24}`;
-      fetchMessages();
-      document.getElementById("messageForm").style.display = "flex";
-      document.getElementById("modalOverlay").style.display = "none";
+    if (avatarFile) {
+      formData.append("avatar", avatarFile);
+    }
+
+    fetch("http://127.0.0.1:3000/register", {
+      method: "POST",
+      body: formData,
     })
-    .catch((error) =>
-      alert("Ошибка: Такой пользователь уже существует. Авторизуйтесь")
-    );
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        document.cookie = `token=${data.token}; path=/; max-age=${
+          60 * 60 * 24
+        }`;
+        fetchMessages();
+        document.getElementById("messageForm").style.display = "flex";
+        document.getElementById("modalOverlay").style.display = "none";
+      })
+      .catch((error) =>
+        alert("Ошибка: Такой пользователь уже существует. Авторизуйтесь")
+      );
+  } else {
+    alert("Вы должны заполнить все поля! Логин и пароль.");
+  }
 }
 
 function loginUser() {
   const username = document.getElementById("loginUsername").value;
   const password = document.getElementById("loginPassword").value;
-  fetch("https://data-base.up.railway.app/login", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ username, password }),
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      document.cookie = `token=${data.token}; path=/; max-age=${60 * 60 * 24}`;
-      document.getElementById("modalOverlay").style.display = "none";
-      document.getElementById("messageForm").style.display = "flex";
-      fetchMessages();
+
+  if (username != "" && password != "") {
+    fetch("http://127.0.0.1:3000/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ username, password }),
     })
-    .catch((error) =>
-      alert("Ошибка: Такого пользователя нет, или пароль/логин введен неверно.")
-    );
+      .then((response) => response.json())
+      .then((data) => {
+        document.cookie = `token=${data.token}; path=/; max-age=${
+          60 * 60 * 24
+        }`;
+        document.getElementById("modalOverlay").style.display = "none";
+        document.getElementById("messageForm").style.display = "flex";
+        fetchMessages();
+      })
+      .catch((error) =>
+        alert(
+          "Ошибка: Такого пользователя нет, или пароль/логин введен неверно."
+        )
+      );
+  } else {
+    alert("Вы должны заполнить все поля! Логин и пароль.");
+  }
 }
 
 function fetchMessages() {
   document.getElementById("modalOverlay").style.display = "none";
-  fetch("https://data-base.up.railway.app/getMessages")
+  fetch("http://127.0.0.1:3000/getMessages")
     .then((response) => response.json())
     .then((messages) => {
       const wall = document.getElementById("wall");
@@ -132,6 +155,10 @@ function fetchMessages() {
 
         messageElement.innerHTML = messageContent;
         wall.appendChild(messageElement);
+        window.scrollTo({
+          top: document.body.scrollHeight,
+          behavior: "smooth",
+        });
       });
     })
     .catch((error) => console.error("Ошибка:", error));
@@ -144,17 +171,17 @@ function postMessageWithImage() {
   messageBtn.style.display = "none";
 
   const image = document.getElementById("image").files[0];
-  const token = getCookie('token');
+  const token = getCookie("token");
 
   console.log(token);
-  
+
   const formData = new FormData();
   formData.append("message", message);
   if (image) {
     formData.append("image", image);
   }
 
-  fetch("https://data-base.up.railway.app/postMessageWithImage", {
+  fetch("http://127.0.0.1:3000/postMessageWithImage", {
     method: "POST",
     headers: {
       Authorization: token,
@@ -170,7 +197,7 @@ function postMessageWithImage() {
     .catch((error) => console.error("Ошибка:", error));
 }
 
-const eventSource = new EventSource("https://data-base.up.railway.app/events");
+const eventSource = new EventSource("http://127.0.0.1:3000/events");
 eventSource.onmessage = function (event) {
   if (event.data === "update") {
     fetchMessages();

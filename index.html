@@ -40,7 +40,10 @@
       </div>
     </div>
 
-    <div class="btn_logout" onclick="document.cookie = `token=; path=/; max-age=0`; location.reload();" style="position: fixed; top: 0; right: 10px; background-color: red; width: max-content; height: 20px;">LOGOUT</div>
+    <div class="control-menu">
+      <div class="btn_back"><img src="img/icons/back.png" alt=""></div>
+      <div class="btn_logout" onclick="document.cookie = `token=; path=/; max-age=0`; location.reload();"><img src="img/icons/logout.png" alt=""></div>
+    </div>
 
     <div class="wall" id="wall"></div>
     <div id="messageForm" class="messageSection" style="display: none">
@@ -65,7 +68,7 @@
         style="display: none"
         class="btn-submit"
       >
-        <img class="icon" src="img/icons/submit.png" alt="" />
+        <img class="icon" class="icon-submit" src="img/icons/submit.png" alt="" />
       </button>
     </div>
 
