@@ -4,18 +4,22 @@ document.getElementById("image").addEventListener("change", function () {
   document.getElementById("file-name").textContent = `${fileName}`;
 });
 
-function switchModal(type) {
+function getCookie(name) {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) return parts.pop().split(';').shift();
+}
+
+if (getCookie('token')){
   const registerForm = document.getElementById("registerForm");
   const loginForm = document.getElementById("loginForm");
 
-  if (type === "login") {
-      registerForm.setAttribute("aria-hidden", "true");
-      loginForm.setAttribute("aria-hidden", "false");
-  } else {
-      registerForm.setAttribute("aria-hidden", "false");
-      loginForm.setAttribute("aria-hidden", "true");
-  }
+  registerForm.setAttribute("aria-hidden", "true");
+  loginForm.setAttribute("aria-hidden", "true");
+
+
 }
+
 function switchModal(type) {
     const registerForm = document.getElementById("registerForm");
     const loginForm = document.getElementById("loginForm");
@@ -60,7 +64,7 @@ function registerUser() {
     .then((data) => {
       console.log(data);
       alert(data.message);
-      localStorage.setItem("token", data.token);
+      document.cookie = `token=${data.token}; path=/; max-age=${60 * 60 * 24}`;
       fetchMessages();
       document.getElementById("messageForm").style.display = "flex";
       document.getElementById("modalOverlay").style.display = "none";
@@ -138,7 +142,7 @@ function postMessageWithImage() {
   messageBtn.style.display = "none";
 
   const image = document.getElementById("image").files[0];
-  const token = localStorage.getItem("token");
+  const token = getCookie('token');
 
   const formData = new FormData();
   formData.append("message", message);
