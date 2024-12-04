@@ -16,7 +16,9 @@ if (getCookie('token')){
 
   registerForm.setAttribute("aria-hidden", "true");
   loginForm.setAttribute("aria-hidden", "true");
-
+  document.getElementById("modalOverlay").style.display = "none";
+  document.getElementById("messageForm").style.display = "flex";
+  fetchMessages()
 
 }
 
@@ -27,12 +29,13 @@ function switchModal(type) {
     if (type === "login") {
         registerForm.setAttribute("aria-hidden", "true");
         loginForm.setAttribute("aria-hidden", "false");
-    } else {
+      } else {
         registerForm.setAttribute("aria-hidden", "false");
         loginForm.setAttribute("aria-hidden", "true");
+        document.getElementById("messageForm").style.display = "flex";
+      }
     }
-}
-
+    
 const input = document.getElementById("message");
 const message = document.querySelector(".btn-submit");
 
@@ -56,14 +59,13 @@ function registerUser() {
     formData.append("avatar", avatarFile);
   }
 
-  fetch("https://data-base.up.railway.app/register", {
+  fetch("http://127.0.0.1:3000/register", {
     method: "POST",
     body: formData,
   })
     .then((response) => response.json())
     .then((data) => {
       console.log(data);
-      alert(data.message);
       document.cookie = `token=${data.token}; path=/; max-age=${60 * 60 * 24}`;
       fetchMessages();
       document.getElementById("messageForm").style.display = "flex";
@@ -77,14 +79,14 @@ function registerUser() {
 function loginUser() {
   const username = document.getElementById("loginUsername").value;
   const password = document.getElementById("loginPassword").value;
-  fetch("https://data-base.up.railway.app/login", {
+  fetch("http://127.0.0.1:3000/login", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ username, password }),
   })
     .then((response) => response.json())
     .then((data) => {
-      localStorage.setItem("token", data.token);
+      document.cookie = `token=${data.token}; path=/; max-age=${60 * 60 * 24}`;
       document.getElementById("modalOverlay").style.display = "none";
       document.getElementById("messageForm").style.display = "flex";
       fetchMessages();
@@ -96,7 +98,7 @@ function loginUser() {
 
 function fetchMessages() {
   document.getElementById("modalOverlay").style.display = "none";
-  fetch("https://data-base.up.railway.app/getMessages")
+  fetch("http://127.0.0.1:3000/getMessages")
     .then((response) => response.json())
     .then((messages) => {
       const wall = document.getElementById("wall");
@@ -132,7 +134,7 @@ function fetchMessages() {
         wall.appendChild(messageElement);
       });
     })
-    .catch((error) => console.error("Ошибка:", error)); // Обработка ошибок
+    .catch((error) => console.error("Ошибка:", error));
 }
 function postMessageWithImage() {
   const message = document.getElementById("message").value;
@@ -144,13 +146,15 @@ function postMessageWithImage() {
   const image = document.getElementById("image").files[0];
   const token = getCookie('token');
 
+  console.log(token);
+  
   const formData = new FormData();
   formData.append("message", message);
   if (image) {
     formData.append("image", image);
   }
 
-  fetch("https://data-base.up.railway.app/postMessageWithImage", {
+  fetch("http://127.0.0.1:3000/postMessageWithImage", {
     method: "POST",
     headers: {
       Authorization: token,
@@ -166,7 +170,7 @@ function postMessageWithImage() {
     .catch((error) => console.error("Ошибка:", error));
 }
 
-const eventSource = new EventSource("https://data-base.up.railway.app/events");
+const eventSource = new EventSource("http://127.0.0.1:3000/events");
 eventSource.onmessage = function (event) {
   if (event.data === "update") {
     fetchMessages();

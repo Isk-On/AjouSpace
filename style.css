@@ -24,6 +24,7 @@ body {
   flex-direction: column;
   gap: 20px;
 
+  margin-left: 10px;
   margin-bottom: 80px;
 }
 
@@ -37,6 +38,8 @@ body {
 }
 
 .timestamp {
+  font-size: 12px;
+  white-space: nowrap;
   font-size: 12px;
 }
 
@@ -58,7 +61,12 @@ body {
   border-bottom-left-radius: 0px;
   border-start-end-radius: 5px;
   padding: 15px 15px 5px 5px;
-  width: max-content;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+  white-space: normal;
+  max-width: 75vw;
+  height: auto;
+
 }
 
 /* btns and input styles */
