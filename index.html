@@ -3,75 +3,185 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="style.css" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Hind+Mysuru:wght@300;400;500;600;700&family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap"
       rel="stylesheet"
     />
-    <title>AjouNet</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Hind+Mysuru:wght@300;400;500;600;700&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Hind+Mysuru:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="HomeStyle.css" />
+    <title>SeleCoders</title>
   </head>
   <body>
-    <div id="modalOverlay" class="modal-overlay show">
-      <div id="registerForm" class="modal-content" aria-hidden="false">
-        <h2>Регистрация</h2>
-        <input
-          type="text"
-          id="registerUsername"
-          placeholder="Имя пользователя"
-        />
-        <input type="password" id="registerPassword" placeholder="Пароль" />
-        <input type="file" id="registerAvatar" accept="image/*" />
-        <button onclick="registerUser()">Регистрация</button>
-        <button class="modal-close" onclick="switchModal('login')">
-          Перейти к Авторизации
-        </button>
-      </div>
-      <div id="loginForm" class="modal-content" aria-hidden="true">
-        <h2>Авторизация</h2>
-        <input type="text" id="loginUsername" placeholder="Имя пользователя" />
-        <input type="password" id="loginPassword" placeholder="Пароль" />
-        <button onclick="loginUser()">Войти</button>
-        <button class="modal-close" onclick="switchModal('register')">
-          Перейти к Регистрации
-        </button>
+    <div class="container">
+      <div class="align-container">
+        <header>
+          <div class="header-container">
+            <img class="logo" src="/images/Logo.png" alt="" />
+            <div class="burger-menu">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+            <ul class="main_uls">
+              <li><a href="#aboutUs">About Us</a></li>
+              <li><a href="#Team">Team</a></li>
+              <li><a href="#projects">Our Projects</a></li>
+              <li><a href="#contacts">Contact</a></li>
+              <li><a href="AjouNet.html">Messenger</a></li>
+            </ul>
+            <div id="burger" class="">
+              <ul>
+                <li><a href="#aboutUs">About Us</a></li>
+                <li><a href="#Team">Team</a></li>
+                <li><a href="#projects">Our Projects</a></li>
+                <li><a href="#contacts">Contact</a></li>
+                <li><a href="AjouNet.html">Messenger</a></li>
+              </ul>
+            </div>
+          </div>
+        </header>
+        <div div class="content">
+          <div id="aboutUs" data-aos="fade-right" data-aos-duration="1000" class="Text">
+            <h1>
+              We're strategic <br />
+              <span>Seo Marketing</span> <br />
+              agency
+            </h1>
+            <h2>
+              SeleCoders team is currently studying at Ajou University, majoring
+              in IT Business. The team members are passionate about technology
+              and business, aiming to combine these fields for innovative
+              solutions. With a strong foundation in both areas, they are
+              preparing to make an impact in the tech industry
+            </h2>
+            <a href="https://www.ajou.ac.kr/en/index.do">
+              <button class="btn-uniSite">Our University's website</button>
+            </a>
+          </div>
+          <div class="content-image"  data-aos="fade-down" data-aos-duration="1000">
+            <img class="" src="images/Image.png" alt="" />
+          </div>
+        </div>
       </div>
     </div>
 
-    <div class="control-menu">
-      <div class="btn_back"><img src="img/icons/back.png" alt=""></div>
-      <div class="btn_logout" onclick="document.cookie = `token=; path=/; max-age=0`; location.reload();"><img src="img/icons/logout.png" alt=""></div>
-    </div>
+    <section id="Team" class="Our-team" data-aos="fade-top" data-aos-duration="1500">
+      <h1>Our Team</h1>
 
-    <div class="wall" id="wall"></div>
-    <div id="messageForm" class="messageSection" style="display: none">
-      <div class="file-upload">
-        <input type="file" class="upload_image" id="image" accept="image/*" />
-        <label for="image" class="custom-file-upload">
-          <i class="fas fa-upload"
-            ><img class="icon icon-attach" src="img/icons/attach.png" alt=""
-          /></i>
-          <span id="file-name"></span>
-        </label>
+      <div class="team-slider">
+        <div class="team-left">
+          <div class="team-member" onclick="showMemberInfo(0)">
+            <img src="images/team/Mariya.jpg" alt="Avatar 1" class="avatar" />
+            <p>Mariya</p>
+          </div>
+          <div class="team-member" onclick="showMemberInfo(1)">
+            <img src="images/team/Elina.jpg" alt="Avatar 2" class="avatar" />
+            <p>Elina</p>
+          </div>
+          <div class="team-member" onclick="showMemberInfo(2)">
+            <img src="images/team/Gulsevar.jpg" alt="Avatar 3" class="avatar" />
+            <p>Gulsevar</p>
+          </div>
+          <div class="team-member" onclick="showMemberInfo(3)">
+            <img src="images/team/Jasmina.jpg" alt="Avatar 3" class="avatar" />
+            <p>Jasmina</p>
+          </div>
+          <div class="team-member" onclick="showMemberInfo(4)">
+            <img src="images/team/Bahodir.jpg" alt="Avatar 3" class="avatar" />
+            <p>Bahodir</p>
+          </div>
+          <div class="team-member" onclick="showMemberInfo(5)">
+            <img
+              src="images/team/Najmiddin.jpg"
+              alt="Avatar 3"
+              class="avatar"
+            />
+            <p>Najmiddin</p>
+          </div>
+          <div class="team-member" onclick="showMemberInfo(6)">
+            <img src="images/team/Akmal.jpg" alt="Avatar 3" class="avatar" />
+            <p>Akmal</p>
+          </div>
+          <div class="team-member" onclick="showMemberInfo(7)">
+            <img src="images/team/Iskandar.jpg" alt="Avatar 3" class="avatar" />
+            <p>Iskandar</p>
+          </div>
+        </div>
+
+        <div class="team-right">
+          <img
+            src="images/team/Mariya.jpg"
+            alt="Full Photo"
+            id="member-photo"
+            class="full-photo"
+          />
+          <div class="second-part">
+            <h2 id="member-name">Mariya</h2>
+            <p id="member-description">
+              Mariya — Project Leader, coordinating all stages of development
+              and ensuring tasks are completed on time.
+            </p>
+          </div>
+        </div>
       </div>
+    </section>
 
-      <input
-        placeholder="Напишите сообщение..."
-        class="search"
-        type="text"
-        id="message"
-      />
-      <button
-        onclick="postMessageWithImage()"
-        style="display: none"
-        class="btn-submit"
-      >
-        <img class="icon" class="icon-submit" src="img/icons/submit.png" alt="" />
-      </button>
-    </div>
+    <section id="projects" data-aos="fade-down" data-aos-duration="1000" class="our-projects">
+      <h1>Our Projects</h1>
+      <div class="projects-container">
+        <div class="project-card">
+          <h3>Selecao-Shop</h3>
+          <p>An online store offering a wide range of Rubik's cubes, mosaics, and other products designed to enhance fine motor skills and foster creativity.</p>
+          <a href="https://isk-on.github.io/Selecao/" class="project-link" target="_blank">Visit Site</a>
+        </div>
+        <div class="project-card">
+          <h3>SeleCoders</h3>
+          <p>A dedicated website showcasing the talented SeleCoders team from Ajou University. Learn more about their projects, skills, and achievements as they pursue innovation in IT Business.</p>
+          <a href="https://isk-on.github.io/AjouSpace/" class="project-link" target="_blank">Visit Site</a>
+        </div>
+        <div class="project-card">
+          <h3>AjouNet</h3>
+          <p>An all-in-one platform designed for Ajou University students, featuring a convenient messenger to connect, collaborate, and share ideas within the university community.</p>
+          <a href="AjouNet.html" class="project-link" target="_blank">Visit Site</a>
+        </div>
+      </div>
+    </section>
 
-    <script type="text/javascript" src="./js/app.js"></script>
+    <section id="contacts" data-aos="fade-down" data-aos-duration="1000" class="our-contacts">
+      <h1>Our Contacts</h1>
+      <div class="contacts-container">
+        <p>If you have any questions, suggestions, or would like to collaborate with us, feel free to reach out. We’re always open to new opportunities and partnerships!</p>
+        <div class="contact-details">
+          <div class="contact-item">
+            <h3>Phone</h3>
+            <p>+8-800-555-35-35</p>
+          </div>
+          <div class="contact-item">
+            <h3>Email</h3>
+            <p><a href="mailto:info@selecoders.com">info@selecoders.com</a></p>
+          </div>
+        </div>
+      </div>
+    </section>
+    <script src="jsMain/script.js"></script>
+    <script src="jsMain/sliderSettings.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+      AOS.init();
+    </script>
   </body>
 </html>
