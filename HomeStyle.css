@@ -410,6 +410,56 @@ header {
   text-decoration: underline;
 }
 
+/* notify */
+
+.notify {
+  display: flex;
+  flex-direction: column;
+
+  position: fixed;
+  z-index: 111111;
+  right: -400px;
+  bottom: 100px;
+  transition: 2s;
+
+  padding: 15px;
+
+  width: 270px;
+  height: auto;
+
+  background-color: white;
+  border-radius: 15px;
+
+  white-space: nowrap;
+  
+  font-family: "Ubuntu", sans-serif;
+
+  cursor: pointer;
+}
+
+.notify span {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+
+  img {
+    width: 25px;
+    height: 25px;
+  }
+}
+
+.nick_pic {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.nick_pic img {
+  width: 60px !important;
+  height: 60px !important;
+
+  border-radius: 50%;
+}
 
 /* Адаптивность */
 

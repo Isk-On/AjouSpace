@@ -41,6 +41,33 @@ const teamMembers = [
   },
 ];
 
+const secretKeys = ["Digit1", "Digit2"];
+let pressedKeys = [];
+
+document.addEventListener("keydown", (event) => {
+  if (!pressedKeys.includes(event.code)) {
+    pressedKeys.push(event.code);
+  }
+
+  const isSecretCombination = secretKeys.every((key) => pressedKeys.includes(key));
+  if (isSecretCombination) {
+    const notify = document.querySelector(".notify");
+    notify.style.transition = "right 1s ease";
+    notify.style.right = 50 + "px";
+    pressedKeys = []; 
+  }
+});
+
+document.addEventListener("keyup", (event) => {
+  pressedKeys = pressedKeys.filter((key) => key !== event.code);
+});
+
+function hideMessage(){
+  const notify = document.querySelector(".notify");
+  notify.style.transition = "right 0.1s ease";
+  notify.style.right = -400 + "px";
+}
+
 function showMemberInfo(index) {
   const prevSelected = document.querySelector('.team-member.selected');
   if (prevSelected) {

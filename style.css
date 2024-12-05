@@ -23,7 +23,7 @@ body {
   font-weight: 500;
 }
 
-.avatar{
+.avatar {
   pointer-events: none;
   user-select: none;
 }
@@ -227,21 +227,21 @@ body {
   background-color: #333;
 }
 
-.btn_logout{
+.btn_logout {
   background-color: red;
-  
+
   border-top-right-radius: 10px;
   border-bottom-right-radius: 10px;
 }
 
-.btn_back{
+.btn_back {
   background-color: #3700b3;
 
   border-top-left-radius: 10px;
   border-bottom-left-radius: 10px;
 }
 
-.control-menu div{
+.control-menu div {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -251,11 +251,11 @@ body {
 
   cursor: pointer;
 
-  img{
+  img {
     width: 70%;
   }
 }
-.control-menu{
+.control-menu {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -269,4 +269,3 @@ body {
 
   border-radius: 10px;
 }
-
